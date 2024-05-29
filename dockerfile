@@ -25,7 +25,8 @@ RUN --mount=type=cache,target=/root/.cache/pip \
     fastapi \
     uvicorn \
     huggingface_hub \
-    pydantic
+    pydantic \
+    accelerate
 
 # install flash-attn
 RUN pip install --no-cache-dir --no-build-isolation flash-attn

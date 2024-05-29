@@ -1,17 +1,18 @@
 import os
-
 from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel
 import torch
 from transformers import AutoModelForCausalLM, AutoTokenizer
 import time
-import huggingface_hub
+import huggingface_hub  
 import uvicorn
 
 
 # Get model name and Hugging Face token from environment variables
 model_name = os.getenv("MODEL")
 hf_token = os.getenv("HF_TOKEN")
+
+print(hf_token)
 # Ensure the environment variables are set
 if not model_name or not hf_token:
     raise ValueError("Environment variables MODEL and HF_TOKEN must be set")

@@ -12,7 +12,6 @@ import uvicorn
 # Get model name and Hugging Face token from environment variables
 model_name = os.getenv("MODEL")
 hf_token = os.getenv("HF_TOKEN")
-
 # Ensure the environment variables are set
 if not model_name or not hf_token:
     raise ValueError("Environment variables MODEL and HF_TOKEN must be set")
@@ -39,12 +38,12 @@ model.cuda().eval()
 
 model.generation_config.max_new_tokens = 256
 model.generation_config.do_sample = True
-model.generation_config.temperature = float(1)
 
 class BatchSentenceRequest(BaseModel):
     sentences: list[str]
+    temperature: float
 
-def generate_responses(sentences: list[str]) -> list[str]:
+def generate_responses(sentences: list[str], temperature: float) -> list[str]:
     messages_list = [
         [{"role": "user", "content": sentence}] for sentence in sentences
     ]
@@ -59,6 +58,7 @@ def generate_responses(sentences: list[str]) -> list[str]:
         truncation=True,
     ).to("cuda")
 
+    model.generation_config.temperature = temperature
 
     tokens = model.generate(
         input_ids=inputs["input_ids"],
@@ -74,9 +74,6 @@ def generate_responses(sentences: list[str]) -> list[str]:
 
 @app.post("/processBatch")
 async def process_batch(request: BatchSentenceRequest):
-    responses = generate_responses(request.sentences)
+    responses = generate_responses(request.sentences, request.temperature)
    
     return {"responses": responses}
-
-if __name__ == "__main__":
-    uvicorn.run(app, host="0.0.0.0", port=8000)

@@ -2,7 +2,7 @@
 
 #################### BASE BUILD IMAGE ####################
 # prepare basic build environment
-FROM nvidia/cuda:12.4.1-devel-ubuntu22.04 AS dev
+FROM nvidia/cuda:12.1.1-devel-ubuntu22.04 AS dev
 
 RUN apt-get update -y \
     && apt-get install -y python3-pip git
@@ -11,7 +11,7 @@ RUN apt-get update -y \
 # https://github.com/pytorch/pytorch/issues/107960 -- hopefully
 # this won't be needed for future versions of this docker image
 # or future versions of triton.
-RUN ldconfig /usr/local/cuda-12.4/compat/
+RUN ldconfig /usr/local/cuda-12.1/compat/
 
 WORKDIR /workspace
 

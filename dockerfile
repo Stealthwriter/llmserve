@@ -15,6 +15,9 @@ RUN ldconfig /usr/local/cuda-12.1/compat/
 
 WORKDIR /workspace
 
+# Copy main.py into the Docker image
+COPY main.py /workspace/
+
 # install build and runtime dependencies
 RUN --mount=type=cache,target=/root/.cache/pip \
     pip install torch \
